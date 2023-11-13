@@ -12,7 +12,6 @@ async function getLocationWeather(location) {
 }
 
 async function proccessInfo(info){
-    //console.log(info);
     const locationInfo = {
         name: info.location.name,
         region : info.location.region
@@ -31,7 +30,7 @@ async function proccessInfo(info){
 
     const tomorrow = info.forecast.forecastday[1].day
     const weatherTomorrow = {
-        farrenheit:{
+        farenheit:{
             min:tomorrow.mintemp_f,
             max:tomorrow.maxtemp_f,
         },
@@ -53,7 +52,6 @@ async function proccessInfo(info){
 const getInfo = async(location) =>{
     const info = await getLocationWeather(location)
     const result =  await proccessInfo(info)
-    console.log(result);
     return result
 }
 
@@ -87,7 +85,6 @@ const createCardHeader = (info) =>{
 }
 
 const createCardToday = (info) =>{
-
     const card  = document.getElementById("today")
     while(card.firstChild){
         card.removeChild(card.firstChild);
@@ -100,6 +97,25 @@ const createCardToday = (info) =>{
     card.appendChild(content)
 }
 
+const createCardHeaderTomorrow = (tomorrowWeather) =>{
+    console.log(tomorrowWeather);
+    const temperature = document.createElement("h2")
+    temperature.innerText = tomorrowWeather.celcius.max +" Cº " + tomorrowWeather.farenheit.max +" Fª"
+    temperature.classList.add("temperature-header")
+    return temperature
+}
+
+const createCardTomorrow = (info) =>{
+    const card  = document.getElementById("tomorrow")
+    while(card.firstChild){
+        card.removeChild(card.firstChild);
+    }
+
+    const header = createCardHeaderTomorrow(info.weather.tomorrow)
+
+    card.appendChild(header)
+}
+
 
 
 const changeBackground = (info) =>{
@@ -110,6 +126,7 @@ const render = async (location) =>{
 
     const locationinfo = await getInfo(location)
     createCardToday(locationinfo)
+    createCardTomorrow(locationinfo)
     changeBackground(locationinfo.weather.description)
 }
 
