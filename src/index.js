@@ -80,58 +80,37 @@ const getInfo = async(location) =>{
     return result
 }
 
-const createCardContent = (info) =>{
+const createCardContent = (description) =>{
     const cardContent = document.createElement("div");
     cardContent.classList.add("card-content");
 
-    const description = document.createElement("p");
-    description.classList.add("card-description");
-    description.innerText = info.weather.today.description;
-    cardContent.appendChild(description);
-
+    const content = document.createElement("p");
+    content.classList.add("card-description");
+    content.innerText = description
+    cardContent.appendChild(content);
 
     return cardContent
 }
 
-const createCardHeader = (info) =>{
+const createCardHeader = (celcius, faranheit) =>{
     const temperature = document.createElement("h2")
-    temperature.innerText = info.celcius +" Cº " + info.farenheit +" Fª"
+    temperature.innerText = celcius +" Cº " + faranheit+" Fª"
     temperature.classList.add("temperature-header")
     return temperature
 }
 
-const createCardToday = (info) =>{
-    const card  = document.getElementById("today")
+const createCard = (celcius, farenheit, description, id) =>{
+    const card  = document.getElementById(id)
     clearElement(card)
 
-    const header = createCardHeader(info.weather.today.temperature)
-    const content = createCardContent(info)
+    const header = createCardHeader(celcius, farenheit)
+    const content = createCardContent(description)
 
     card.appendChild(header)
     card.appendChild(content)
+
 }
 
-const createCardHeaderTomorrow = (tomorrowWeather) =>{
-    console.log(tomorrowWeather);
-    const temperature = document.createElement("h2")
-    temperature.innerText = tomorrowWeather.celcius.max +" Cº " + tomorrowWeather.farenheit.max +" Fª"
-    temperature.classList.add("temperature-header")
-    return temperature
-}
-
-const createCardTomorrow = (info) =>{
-    const card  = document.getElementById("tomorrow")
-    clearElement(card)
-
-    const header = createCardHeaderTomorrow(info.weather.tomorrow)
-
-    card.appendChild(header)
-
-    const description = document.createElement("p");
-    description.classList.add("card-description");
-    description.innerText = info.weather.tomorrow.description;
-    card.appendChild(description);
-}
 
 const createHourCard = (hourWeather) =>{
     const hoursConteiner = document.getElementById("timeline")
@@ -177,8 +156,18 @@ const render = async (location) =>{
 
     createTitle(locationinfo.location);
 
-    createCardToday(locationinfo);
-    createCardTomorrow(locationinfo);
+    createCard(
+        locationinfo.weather.today.temperature.celcius,
+        locationinfo.weather.today.temperature.farenheit,
+        locationinfo.weather.today.temperature,
+        "today"
+    );
+    createCard(
+        locationinfo.weather.tomorrow.celcius.max,
+        locationinfo.weather.tomorrow.farenheit.max,
+        locationinfo.weather.tomorrow.description,
+        "tomorrow"
+    );
 
     createHoursCards(locationinfo.weather.nextHours)
    
