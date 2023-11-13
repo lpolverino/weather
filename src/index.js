@@ -11,9 +11,14 @@ async function getLocationWeather(location) {
     }
 }
 
+const clearElement = (element) => {
+    while(element.firstChild){
+        element.removeChild(element.firstChild);
+    }
+}
+
 async function proccessInfo(info){
 
-    console.log(info);
     const locationInfo = {
         name: info.location.name,
         region : info.location.region
@@ -50,9 +55,12 @@ async function proccessInfo(info){
         console.log("cannot get hour");
     }
     const weatherHours = []
-    for (var i = 0 ; i < 4; i++) {
+    for (var i = 0 ; i < 5; i++) {
         if(hour + i < 24){
-            weatherHours.push(info.forecast.forecastday[0].hour[hour + i])
+            weatherHours.push({
+                hour: hour + i,
+                weather:info.forecast.forecastday[0].hour[hour + i]
+            })
         }
       }
       
@@ -61,7 +69,8 @@ async function proccessInfo(info){
         weather:{
             today:weatherToday,
             tomorrow:weatherTomorrow,
-            nextHours:weatherHours 
+            nextHours:weatherHours
+            
         }
     }
 }
@@ -80,15 +89,6 @@ const createCardContent = (info) =>{
     description.innerText = info.weather.today.description;
     cardContent.appendChild(description);
 
-    const regionLocation = document.createElement("div");
-    regionLocation.classList.add("card-region");
-
-    const location = document.createElement("p");
-    location.innerText = info.location.name + " " + info.location.region 
-    location.classList.add("card-location")
-    regionLocation.appendChild(location)
-
-    cardContent.appendChild(regionLocation)
 
     return cardContent
 }
@@ -102,9 +102,7 @@ const createCardHeader = (info) =>{
 
 const createCardToday = (info) =>{
     const card  = document.getElementById("today")
-    while(card.firstChild){
-        card.removeChild(card.firstChild);
-    }
+    clearElement(card)
 
     const header = createCardHeader(info.weather.today.temperature)
     const content = createCardContent(info)
@@ -123,27 +121,38 @@ const createCardHeaderTomorrow = (tomorrowWeather) =>{
 
 const createCardTomorrow = (info) =>{
     const card  = document.getElementById("tomorrow")
-    while(card.firstChild){
-        card.removeChild(card.firstChild);
-    }
+    clearElement(card)
 
     const header = createCardHeaderTomorrow(info.weather.tomorrow)
 
     card.appendChild(header)
+
+    const description = document.createElement("p");
+    description.classList.add("card-description");
+    description.innerText = info.weather.tomorrow.description;
+    card.appendChild(description);
 }
 
 const createHourCard = (hourWeather) =>{
     const hoursConteiner = document.getElementById("timeline")
+
+    const card = document.createElement("div");
+    card.classList.add("hour-card");
+
     const content = document.createElement("h3")
-    content.innerText = hourWeather.temp_c + "Cº " + hourWeather.temp_f +"Fª"
-    hoursConteiner.appendChild(content)
+    content.innerText = hourWeather.weather.temp_c + "Cº " + hourWeather.weather.temp_f +"Fª"
+
+    const timePara = document.createElement("p");
+    timePara.innerText = hourWeather.hour
+
+    card.appendChild(content)
+    card.appendChild(timePara)
+    hoursConteiner.appendChild(card)
 } 
 
 const createHoursCards = (hoursWeather) =>{
     const hoursConteiner = document.getElementById("timeline")
-    while(hoursConteiner.firstChild){
-        hoursConteiner.removeChild(hoursConteiner.firstChild);
-    }
+    clearElement(hoursConteiner)
     hoursWeather.forEach((hourWeather) =>{
         createHourCard(hourWeather);
     });
@@ -154,9 +163,20 @@ const changeBackground = (info) =>{
 
 }
 
+const createTitle = (location) =>{
+    const titleConteiner = document.getElementById("Location-title")
+    clearElement(titleConteiner)
+    const title = document.createElement("h1");
+    title.innerText = location.name + " " + location.region
+    titleConteiner.appendChild(title)
+}
+
 const render = async (location) =>{
 
     const locationinfo = await getInfo(location);
+
+    createTitle(locationinfo.location);
+
     createCardToday(locationinfo);
     createCardTomorrow(locationinfo);
 
@@ -165,30 +185,33 @@ const render = async (location) =>{
     changeBackground(locationinfo.weather.description);
 }
 
-const btnLocation = document.getElementById("btn-location")
-btnLocation.addEventListener("click", (e)=>{
-    e.preventDefault();
-    const formInput = document.getElementById("location").value;
-    try{
-        render(formInput);
-    }catch(e){
-        console.log("there was an error",e);
-        render("london")
-    }
-});
+(function initialize(){
+    const btnLocation = document.getElementById("btn-location")
+    btnLocation.addEventListener("click", (e)=>{
+        e.preventDefault();
+        const formInput = document.getElementById("location").value;
+        try{
+            render(formInput);
+        }catch(e){
+            console.log("there was an error",e);
+            render("london")
+        }
+    });
+    
+    const cardToday = document.createElement("div");
+    const content = document.getElementById("content")
+    cardToday.id ="today"
+    content.appendChild(cardToday)
+    
+    const cardTomorrow = document.createElement("div");
+    cardTomorrow.id ="tomorrow"
+    content.appendChild(cardTomorrow)
+    
+    const timelineConteiner = document.createElement("div")
+    timelineConteiner.id = "timeline"
+    content.appendChild(timelineConteiner);
+    
+    render("london")
 
-const cardToday = document.createElement("div");
-const content = document.getElementById("content")
-cardToday.id ="today"
-content.appendChild(cardToday)
+})();
 
-const cardTomorrow = document.createElement("div");
-cardTomorrow.id ="tomorrow"
-content.appendChild(cardTomorrow)
-
-const timelineConteiner = document.createElement("div")
-timelineConteiner.id = "timeline"
-content.appendChild(timelineConteiner);
-
-
-render("london")
