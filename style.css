@@ -1,0 +1,27 @@
+#content{
+    margin-top: 68px;
+    display:  grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+
+#timeline{
+    grid-column: 2/3;
+    grid-row: 2/3;
+    display: flex;
+    gap: 52px;
+}
+
+#tomorrow{
+    grid-column: 3/4;
+}
+
+#srch-form{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+form{
+    margin: 0px auto;
+}

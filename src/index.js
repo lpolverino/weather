@@ -12,6 +12,8 @@ async function getLocationWeather(location) {
 }
 
 async function proccessInfo(info){
+
+    console.log(info);
     const locationInfo = {
         name: info.location.name,
         region : info.location.region
@@ -41,11 +43,25 @@ async function proccessInfo(info){
         description: tomorrow.condition.text
     }
 
+    let hour = info.location.localtime.slice(-5,-3)
+    try{
+        hour = Number(hour)
+    }catch(e){
+        console.log("cannot get hour");
+    }
+    const weatherHours = []
+    for (var i = 0 ; i < 4; i++) {
+        if(hour + i < 24){
+            weatherHours.push(info.forecast.forecastday[0].hour[hour + i])
+        }
+      }
+      
     return {
         location: locationInfo,
         weather:{
             today:weatherToday,
-            tomorrow:weatherTomorrow
+            tomorrow:weatherTomorrow,
+            nextHours:weatherHours 
         }
     }
 }
@@ -61,7 +77,7 @@ const createCardContent = (info) =>{
 
     const description = document.createElement("p");
     description.classList.add("card-description");
-    description.innerText = info.weather.description;
+    description.innerText = info.weather.today.description;
     cardContent.appendChild(description);
 
     const regionLocation = document.createElement("div");
@@ -116,6 +132,22 @@ const createCardTomorrow = (info) =>{
     card.appendChild(header)
 }
 
+const createHourCard = (hourWeather) =>{
+    const hoursConteiner = document.getElementById("timeline")
+    const content = document.createElement("h3")
+    content.innerText = hourWeather.temp_c + "Cº " + hourWeather.temp_f +"Fª"
+    hoursConteiner.appendChild(content)
+} 
+
+const createHoursCards = (hoursWeather) =>{
+    const hoursConteiner = document.getElementById("timeline")
+    while(hoursConteiner.firstChild){
+        hoursConteiner.removeChild(hoursConteiner.firstChild);
+    }
+    hoursWeather.forEach((hourWeather) =>{
+        createHourCard(hourWeather);
+    });
+}
 
 
 const changeBackground = (info) =>{
@@ -124,10 +156,13 @@ const changeBackground = (info) =>{
 
 const render = async (location) =>{
 
-    const locationinfo = await getInfo(location)
-    createCardToday(locationinfo)
-    createCardTomorrow(locationinfo)
-    changeBackground(locationinfo.weather.description)
+    const locationinfo = await getInfo(location);
+    createCardToday(locationinfo);
+    createCardTomorrow(locationinfo);
+
+    createHoursCards(locationinfo.weather.nextHours)
+   
+    changeBackground(locationinfo.weather.description);
 }
 
 const btnLocation = document.getElementById("btn-location")
@@ -149,7 +184,11 @@ content.appendChild(cardToday)
 
 const cardTomorrow = document.createElement("div");
 cardTomorrow.id ="tomorrow"
-
 content.appendChild(cardTomorrow)
+
+const timelineConteiner = document.createElement("div")
+timelineConteiner.id = "timeline"
+content.appendChild(timelineConteiner);
+
 
 render("london")
