@@ -28,10 +28,11 @@ async function proccessInfo(info){
         }
     }
 }
-
-async function getInfo(location){
+const getInfo = async(location) =>{
     const info = await getLocationWeather(location)
     await proccessInfo(info)
 }
 
-getInfo("london")
+export {
+    getInfo
+}
