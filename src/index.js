@@ -1,3 +1,10 @@
+//while modules arent in the app(aka its not a OOP app), this global varialbes are needed
+
+let unity = "celcius"
+let city = ""
+let locationinfo = {}
+
+
 async function getLocationWeather(location) {
     const url ="https://api.weatherapi.com/v1/forecast.json?key=ce6352e5ca1c44c4917131930231211&q=" + location + "&days=2"
     try{
@@ -74,6 +81,7 @@ async function proccessInfo(info){
         }
     }
 }
+
 const getInfo = async(location) =>{
     const info = await getLocationWeather(location)
     const result =  await proccessInfo(info)
@@ -94,7 +102,11 @@ const createCardContent = (description) =>{
 
 const createCardHeader = (celcius, faranheit) =>{
     const temperature = document.createElement("h2")
-    temperature.innerText = celcius +" Cº " + faranheit+" Fª"
+    if(unity === "celcius"){
+        temperature.innerText = celcius +" Cº"
+    }else{
+        temperature.innerText = faranheit+" Fª"
+    }
     temperature.classList.add("temperature-header")
     return temperature
 }
@@ -111,7 +123,6 @@ const createCard = (celcius, farenheit, description, id) =>{
 
 }
 
-
 const createHourCard = (hourWeather) =>{
     const hoursConteiner = document.getElementById("timeline")
 
@@ -119,7 +130,11 @@ const createHourCard = (hourWeather) =>{
     card.classList.add("hour-card");
 
     const content = document.createElement("h3")
-    content.innerText = hourWeather.weather.temp_c + "Cº " + hourWeather.weather.temp_f +"Fª"
+    if(unity ==="celcius"){
+        content.innerText = hourWeather.weather.temp_c + "Cº"
+    }else{
+        content.innerText = hourWeather.weather.temp_f +"Fª"
+    }
 
     const timePara = document.createElement("p");
     timePara.innerText = hourWeather.hour
@@ -137,7 +152,6 @@ const createHoursCards = (hoursWeather) =>{
     });
 }
 
-
 const changeBackground = (info) =>{
 
 }
@@ -152,14 +166,21 @@ const createTitle = (location) =>{
 
 const render = async (location) =>{
 
-    const locationinfo = await getInfo(location);
+
+    if(city !== location){
+        locationinfo = await getInfo(location);
+    }
+
+    if(city === ""){
+        city = location
+    }
 
     createTitle(locationinfo.location);
 
     createCard(
         locationinfo.weather.today.temperature.celcius,
         locationinfo.weather.today.temperature.farenheit,
-        locationinfo.weather.today.temperature,
+        locationinfo.weather.today.description,
         "today"
     );
     createCard(
@@ -174,18 +195,36 @@ const render = async (location) =>{
     changeBackground(locationinfo.weather.description);
 }
 
+
 (function initialize(){
+
     const btnLocation = document.getElementById("btn-location")
     btnLocation.addEventListener("click", (e)=>{
         e.preventDefault();
         const formInput = document.getElementById("location").value;
         try{
             render(formInput);
+            city = formInput
         }catch(e){
             console.log("there was an error",e);
             render("london")
         }
     });
+
+    const btnChange = document.getElementById("change");
+    btnChange.addEventListener("click", (e) =>{
+        let  button = e.target
+        if(button.dataset["unity"] === "celcius"){
+            button.dataset["unity"] = "farenhait"
+            button.innerText = "Fª"
+            unity = "farenhait"
+        }else{
+            button.dataset["unity"] = "celcius"
+            button.innerText ="Cª"
+            unity = "celcius"
+        }
+        render(city)
+    })
     
     const cardToday = document.createElement("div");
     const content = document.getElementById("content")
