@@ -122,3 +122,22 @@ form{
     grid-column: 2/3;
     grid-row: 1/2;
 }
+
+body{
+    height: 100vh;
+    background-size: 100%;
+}
+
+#bg{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.day{
+    background: url("./src/img/sunny.jpeg") no-repeat;
+}
+
+.night{
+    background: url("./src/img/nigth.jpg") no-repeat;
+}

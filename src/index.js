@@ -3,6 +3,7 @@
 let unity = "celcius"
 let city = ""
 let locationinfo = {}
+let is_Day = true
 
 
 async function getLocationWeather(location) {
@@ -25,6 +26,7 @@ const clearElement = (element) => {
 }
 
 async function proccessInfo(info){
+    console.log(info);
 
     const locationInfo = {
         name: info.location.name,
@@ -70,6 +72,12 @@ async function proccessInfo(info){
             })
         }
       }
+
+    if(info.current.is_day === 1){
+        is_Day = true
+    }else{
+        is_Day = false
+    }
       
     return {
         location: locationInfo,
@@ -77,7 +85,6 @@ async function proccessInfo(info){
             today:weatherToday,
             tomorrow:weatherTomorrow,
             nextHours:weatherHours
-            
         }
     }
 }
@@ -157,7 +164,17 @@ const createHoursCards = (hoursWeather) =>{
     });
 }
 
-const changeBackground = (info) =>{
+const changeBackground = () =>{
+    const  bg = document.getElementById("bg");
+
+    if(!is_Day && bg.classList.contains("day")){
+        bg.classList.remove("day")
+        bg.classList.add("night")
+    }
+    if(is_Day && bg.classList.contains("night")){
+        bg.classList.remove("night")
+        bg.classList.add("day")
+    }
 
 }
 
@@ -197,7 +214,7 @@ const render = async (location) =>{
 
     createHoursCards(locationinfo.weather.nextHours)
    
-    changeBackground(locationinfo.weather.description);
+    changeBackground();
 }
 
 
