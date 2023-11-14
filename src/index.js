@@ -26,8 +26,7 @@ const clearElement = (element) => {
 }
 
 async function proccessInfo(info){
-    console.log(info);
-
+    
     const locationInfo = {
         name: info.location.name,
         region : info.location.region

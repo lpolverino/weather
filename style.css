@@ -114,7 +114,7 @@ form{
 }
 
 #btn-location{
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0.8);
     background-image: url("./src/img/magnify.svg");
     background-repeat: no-repeat;
     width: 32px;
