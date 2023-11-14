@@ -128,6 +128,11 @@ const createCard = (celcius, farenheit, description, id) =>{
     const conteiner = document.createElement("div")
     conteiner.classList.add("card-conteiner")
 
+    const title = document.createElement("h2");
+    title.innerText = id.charAt(0).toUpperCase() + id.slice(1)
+    title.classList.add("card-title")
+
+    conteiner.appendChild(title)
     conteiner.appendChild(header)
     conteiner.appendChild(content)
 
