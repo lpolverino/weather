@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="./src/index.js" defer ></script>
 </head>
 <body>
     <div id="srch-form">
         <form >
-            <label for="location"></label>
-            <input type="text" name="location" id="location">
-            <button id="btn-location"> Search</button>
+            <div class="form-row">
+                <label for="location"></label>
+                <input type="text" name="location" id="location" placeholder="ej:London">
+            </div>
+            <button id="btn-location"></button>
         </form>
 
         <button id="change" data-unity="celcius">Cº</button>

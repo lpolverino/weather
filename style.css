@@ -1,8 +1,19 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Jost', sans-serif;
+}
+
+button{
+    cursor: pointer;
+}
+
 #content{
     margin-top: 68px;
     display:  grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
+    row-gap: 48px;
 }
 
 #timeline{
@@ -10,13 +21,23 @@
     grid-row: 2/3;
     display: flex;
     gap: 52px;
+    justify-self: center;
+}
+
+#today{
+    grid-column: 1/2;
+    align-self: center;
+    justify-self: center;
 }
 
 #tomorrow{
     grid-column: 3/4;
+    align-self: center;
+    justify-self: center;
 }
 
 #srch-form{
+    margin: 1.25rem;
     display: flex;
     justify-content: center;
     align-items:center;
@@ -24,4 +45,80 @@
 
 form{
     margin: 0px auto;
+    display: grid;
+    grid-column: 1fr 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px
+}
+
+#location{
+    width: max(50vh, 500px);
+    height: 32px;
+    border-radius: 15px;
+    border: 2px solid #e6d1cc;
+    font-size: 16px;
+}
+
+#Location-title{
+    margin-left: 2rem;
+    margin-top: 2rem;
+}
+
+#today,
+#tomorrow,
+.hour-card{
+    background-color: rgba(255, 255, 255, 0.3);
+    border:  3px solid rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+}
+
+.hour-card{
+    flex: 1;
+    padding: 18px;
+    height: 100px;
+    text-align: center;
+}
+
+.hour-card p {
+    margin-top: 18px;
+}
+
+#today, 
+#tomorrow{
+    width: 250px;
+    height: 200px;
+    display: flex;
+}
+
+.card-conteiner{
+    margin:  28px auto;
+    text-align: center;
+    font-size: 18px;
+}
+
+.card-content{
+    margin: 18px 0;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+#change{
+    padding: 8px;
+    width: 60px;
+    height: 46px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+#btn-location{
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("./src/img/magnify.svg");
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    grid-column: 2/3;
+    grid-row: 1/2;
 }

@@ -118,8 +118,13 @@ const createCard = (celcius, farenheit, description, id) =>{
     const header = createCardHeader(celcius, farenheit)
     const content = createCardContent(description)
 
-    card.appendChild(header)
-    card.appendChild(content)
+    const conteiner = document.createElement("div")
+    conteiner.classList.add("card-conteiner")
+
+    conteiner.appendChild(header)
+    conteiner.appendChild(content)
+
+    card.appendChild(conteiner)
 
 }
 
@@ -131,13 +136,13 @@ const createHourCard = (hourWeather) =>{
 
     const content = document.createElement("h3")
     if(unity ==="celcius"){
-        content.innerText = hourWeather.weather.temp_c + "Cº"
+        content.innerText = hourWeather.weather.temp_c + " Cº"
     }else{
-        content.innerText = hourWeather.weather.temp_f +"Fª"
+        content.innerText = hourWeather.weather.temp_f +" Fª"
     }
 
     const timePara = document.createElement("p");
-    timePara.innerText = hourWeather.hour
+    timePara.innerText = hourWeather.hour + "hs"
 
     card.appendChild(content)
     card.appendChild(timePara)
